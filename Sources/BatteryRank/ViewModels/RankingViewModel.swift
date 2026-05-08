@@ -7,6 +7,7 @@ class RankingViewModel: ObservableObject {
     @Published var isOnBatteryPower = false
     @Published var isMonitoring = false
     @Published var grouping: RankingGrouping = .byApp
+    @Published var selectedPeriod: TimePeriod = .last1h
 
     private let processMonitor = ProcessMonitor()
     let batteryMonitor = BatteryMonitor()
@@ -40,8 +41,7 @@ class RankingViewModel: ObservableObject {
     }
 
     func refreshRankings() {
-        let startDate = Calendar.current.date(byAdding: .hour, value: -1, to: Date()) ?? Date()
-        rankings = dataStore.fetchRankings(from: startDate, grouping: grouping)
+        rankings = dataStore.fetchRankings(from: selectedPeriod.startDate, grouping: grouping)
     }
 
     func updateGrouping(_ grouping: RankingGrouping) {

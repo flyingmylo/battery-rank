@@ -16,10 +16,14 @@ struct RankingRowView: View {
                     .resizable()
                     .frame(width: 24, height: 24)
             } else {
-                Image(systemName: "app.fill")
-                    .font(.system(size: 16))
-                    .foregroundColor(.secondary)
+                Text(String(ranking.appName.prefix(1)).uppercased())
+                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
                     .frame(width: 24, height: 24)
+                    .background {
+                        RoundedRectangle(cornerRadius: 6, style: .continuous)
+                            .fill(colorForName(ranking.appName))
+                    }
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -60,6 +64,12 @@ struct RankingRowView: View {
     }
 
     private func colorForPercentage(_ pct: Double) -> Color {
-        pct > 30 ? .red : pct > 15 ? .orange : .green
+        pct > 30 ? NotionColor.coral : pct > 15 ? NotionColor.blue : NotionColor.green
+    }
+
+    private func colorForName(_ name: String) -> Color {
+        let palette: [Color] = [NotionColor.blue, NotionColor.coral, NotionColor.green, NotionColor.purple]
+        let hash = abs(name.hashValue)
+        return palette[hash % palette.count]
     }
 }
