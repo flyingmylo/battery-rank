@@ -1,0 +1,25 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and create DMG
+        run: |
+          chmod +x dmg.sh
+          ./dmg.sh
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: BatteryRank-*.dmg
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
